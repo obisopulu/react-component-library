@@ -75,7 +75,7 @@ const Accordion = () => {
 
 
   const handleClick = (currentId) => {
-    setSelected(currentId)
+    setSelected(currentId === selected ? 0 : currentId)
   }
 
   return (
