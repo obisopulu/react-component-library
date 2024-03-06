@@ -7,6 +7,8 @@ import Arrow from '../assets/icons/arrow.svg';
 // design inspiration: https://www.uidesigndaily.com/posts/sketch-accordion-list-panel-day-982
 
 const Wrapper = styled.section`
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 20px;
   color: #000;
@@ -17,7 +19,7 @@ const Wrapper = styled.section`
   max-width: 500px;
 `;
 const Header = styled.div`
-  padding: 50px;
+  padding: 50px 50px 0;
 `;
 const Title = styled.h2`
   padding-bottom: .1em;
@@ -46,7 +48,7 @@ const Question = styled.div`
     background: #fafafa;
   }
   &:active {
-    background: #eee;
+    background: #f7f7f7;
   }
 `;
 const QuestionText = styled.div`
@@ -56,7 +58,6 @@ const QuestionIcon = styled.div`
   transform: rotate(180deg);
   flex-grow: 1;
   &:active {
-    background: #eee;
     transition: transform 1s;
     transform: rotate(270deg);
   }
@@ -65,17 +66,54 @@ const Answer = styled.div`
   border-top: thick solid #f0f0f0;
   padding: 10px 20px 20px 20px;
 `;
+const Button = styled.button`
+  background: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  margin: 20px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  &:hover {
+    background: #f7f7f7;
+  }
+  &:active {
+    background: #eee;
+    box-shadow: 0 0 1px rgba(0,0,0,0.1);
+  }
+`;
 const Accordion = () => {
 
   const [selected, setSelected] = useState(0);
+  const [multiple, setMultiple] = useState(false);
+  const [multipleArr, setMultipleArr] = useState([0]);
 
   const title = data[0].header;
   const description = data[0].description;
   const questions = data[0].questions;
 
 
-  const handleClick = (currentId) => {
-    setSelected(currentId === selected ? 0 : currentId)
+  const handleOpen = (currentId) => {
+    if(multiple){
+      if(multipleArr.includes(currentId)){
+        const index = multipleArr.indexOf(currentId);
+        multipleArr.splice(index, 1);
+      } else {
+        multipleArr.push(currentId);
+      }
+      setMultipleArr([...multipleArr]);
+    }else{
+      setSelected(currentId === selected ? 0 : currentId);
+    }
+  }
+  const handleMultiple = () => {
+    setMultiple(!multiple)
+    if(multiple === false) {
+      setMultipleArr([0]);
+      setSelected(0);
+      console.log(multipleArr, selected);
+    }
   }
 
   return (
@@ -92,13 +130,15 @@ const Accordion = () => {
           </Description>
         }
       </Header>
-
+      <Button onClick={()=> handleMultiple()}>
+        More info { multiple ? <span>&#9871;</span> : <span>&#9866;</span>}
+      </Button>
       {questions && questions.length > 0 ?
         <Body>
           {questions.map((question) => {
             return (
               <Questions key={question.id}>
-                <Question onClick={()=> handleClick(question.id)}>
+                <Question onClick={()=> handleOpen(question.id)}>
                   <QuestionText>
                     {question.question}
                   </QuestionText>
@@ -106,7 +146,7 @@ const Accordion = () => {
                     <img src={Arrow} alt='Xing logo' />
                   </QuestionIcon> 
                 </Question>
-                {selected === question.id ? 
+                {selected === question.id || multipleArr.includes(question.id)? 
                   <Answer>
                     {question.answer}
                   </Answer>
