@@ -15,3 +15,9 @@
 .HRC-item {
     grid-area: 2 / 1 / 2 / 3;
 }
+.R-active{
+    color: #FFD700;
+}
+.R-inactive{
+    color: #22222200;
+}
