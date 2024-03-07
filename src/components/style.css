@@ -1,0 +1,17 @@
+.RCG-item1 {
+    grid-row: 1 / 1;
+}
+.RCG-item2 {
+    grid-row: 2 / 2;
+}
+.RCG-item3 {
+    grid-row: 3 / 3;
+    background-color: #222 !important;
+    color: white;
+}
+.RCG-item4 {
+    grid-row: 1 / 4;
+}
+.HRC-item {
+    grid-area: 2 / 1 / 2 / 3;
+}
